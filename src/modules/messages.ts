@@ -6,7 +6,7 @@ import {User} from "../models/user";
 
 import * as cheerio from 'cheerio';
 import * as fs from "fs";
-import axios, {AxiosResponse} from "axios";
+import {AxiosResponse} from "axios";
 
 export class Messages extends Module {
     public async getMessages(): Promise<Message[]> {
@@ -74,7 +74,7 @@ export class Messages extends Module {
 
     public async sendMessage(topic: string, content: string, recipient: string[]): Promise<void> {
         const url = `/dziennik/dodajwiadomosc`;
-        const text = await this.webPost(url, {
+        await this.webPost(url, {
             nazwa: topic,
             tresc: content,
             widok_odbiorcow: "1",
