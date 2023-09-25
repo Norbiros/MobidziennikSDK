@@ -6,7 +6,7 @@ import {User} from "../models/user";
 
 import * as cheerio from 'cheerio';
 import * as fs from "fs";
-import {AxiosResponse} from "axios";
+import axios, {AxiosResponse} from "axios";
 
 export class Messages extends Module {
     public async getMessages(): Promise<Message[]> {
@@ -72,6 +72,18 @@ export class Messages extends Module {
         };
     }
 
+    public async sendMessage(topic: string, content: string, odbiorca: string): Promise<void> {
+        const url = `/dziennik/dodajwiadomosc`;
+        const text = await this.webPost(url, {
+            nazwa: topic,
+            tresc: content,
+            widok_odbiorcow: "1",
+            typodbiorcow: "4",
+            file: "",
+            "odbiorcy[]": odbiorca,
+        });
+    }
+
     async downloadAttachment(url: string, destinationPath: string): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
@@ -87,4 +99,6 @@ export class Messages extends Module {
             }
         });
     }
+
+
 }

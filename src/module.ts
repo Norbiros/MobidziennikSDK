@@ -28,4 +28,25 @@ export class Module {
                 });
         });
     }
+
+    public webPost(url: string, data: any) {
+        return new Promise<string>((resolve, reject) => {
+            this.api.axios
+                .post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, data)
+                .then((el: AxiosResponse<any>) => {
+                    const text = el.data;
+                    if (
+                        text === 'Nie jestes zalogowany' ||
+                        text.includes('przypomnij_haslo_email' || text.includes('Podano niepoprawny login i/lub hasło'))
+                    ) {
+                        reject(new Error('Not logged in'));
+                    }
+                    resolve(text);
+                })
+                .catch((e) => {
+                    console.error(e);
+                    reject(e);
+                });
+        });
+    }
 }
