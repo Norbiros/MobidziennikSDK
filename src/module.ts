@@ -32,7 +32,7 @@ export class Module {
     public webPost(url: string, data: any) {
         return new Promise<string>((resolve, reject) => {
             this.api.axios
-                .post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, data)
+                .post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, new URLSearchParams(data))
                 .then((el: AxiosResponse<any>) => {
                     const text = el.data;
                     if (

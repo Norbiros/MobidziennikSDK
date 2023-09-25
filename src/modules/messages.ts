@@ -72,7 +72,7 @@ export class Messages extends Module {
         };
     }
 
-    public async sendMessage(topic: string, content: string, recipient: string): Promise<void> {
+    public async sendMessage(topic: string, content: string, recipient: string[]): Promise<void> {
         const url = `/dziennik/dodajwiadomosc`;
         const text = await this.webPost(url, {
             nazwa: topic,
