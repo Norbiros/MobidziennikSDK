@@ -1,5 +1,6 @@
 import {MobidziennikAPI} from './index';
 import {AxiosResponse} from 'axios';
+import {Utils} from './utils';
 
 export class Module {
     protected api: MobidziennikAPI;
@@ -13,14 +14,21 @@ export class Module {
             this.api.axios
                 .get(`https://${this.api.schoolId}.mobidziennik.pl${url}`)
                 .then((el: AxiosResponse<any>) => {
-                    const text = el.data;
-                    if (
-                        text === 'Nie jestes zalogowany' ||
-                        text.includes('przypomnij_haslo_email' || text.includes('Podano niepoprawny login i/lub hasło'))
-                    ) {
-                        reject(new Error('Not logged in'));
-                    }
-                    resolve(text);
+                    Utils.loggedInCheck(el, resolve, reject);
+                })
+                .catch((e) => {
+                    console.error(e);
+                    reject(e);
+                });
+        });
+    }
+
+    public webPost(url: string, data: any) {
+        return new Promise<string>((resolve, reject) => {
+            this.api.axios
+                .post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, new URLSearchParams(data))
+                .then((el: AxiosResponse<any>) => {
+                    Utils.loggedInCheck(el, resolve, reject);
                 })
                 .catch((e) => {
                     console.error(e);

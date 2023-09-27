@@ -72,6 +72,18 @@ export class Messages extends Module {
         };
     }
 
+    public async sendMessage(topic: string, content: string, recipients: string[]): Promise<void> {
+        const url = `/dziennik/dodajwiadomosc`;
+        await this.webPost(url, {
+            nazwa: topic,
+            tresc: content,
+            widok_odbiorcow: "1",
+            typodbiorcow: "4",
+            file: "",
+            "odbiorcy[]": recipient,
+        });
+    }
+
     async downloadAttachment(url: string, destinationPath: string): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
@@ -87,4 +99,6 @@ export class Messages extends Module {
             }
         });
     }
+
+
 }
