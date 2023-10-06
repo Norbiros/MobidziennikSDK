@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { wrapper } from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie';
 import { Messages } from './modules/messages';
+import { Library } from './modules/library';
 
 export class MobidziennikAPI {
     readonly axios: AxiosInstance;
@@ -10,6 +11,7 @@ export class MobidziennikAPI {
 
     // Modules
     public messages: Messages = new Messages(this);
+    public library: Library = new Library(this);
 
     constructor(schoolId: string) {
         this.schoolId = schoolId;

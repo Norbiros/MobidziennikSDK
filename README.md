@@ -19,5 +19,8 @@ client.authorize('<email>', '<password>').then((el) => {
     // Messages
     mobi.messages.getMessages().then((messages) => {})
     mobi.messages.getMessage('<message_id>').then((el) => {});
+    
+    // Library
+    mobi.library.getBooks().then((books) => {})
 });
 ```

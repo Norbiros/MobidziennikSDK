@@ -20,15 +20,17 @@ export class Utils {
         };
     }
 
-    public static loggedInCheck(
+    public static isLoggedIn(
         el: AxiosResponse<any>,
         resolve: (value: string | PromiseLike<string>) => void,
         reject: (reason?: any) => void,
     ) {
         const text = el.data;
         if (
-            text === 'Nie jestes zalogowany' ||
-            text.includes('przypomnij_haslo_email' || text.includes('Podano niepoprawny login i/lub hasło'))
+            text instanceof String &&
+            (text === 'Nie jestes zalogowany' ||
+                text.includes('przypomnij_haslo_email') ||
+                text.includes('Podano niepoprawny login i/lub hasło'))
         ) {
             reject(new Error('Not logged in'));
         }

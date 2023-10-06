@@ -9,12 +9,12 @@ export class Module {
         this.api = api;
     }
 
-    public webGet(url: string) {
+    protected webGet(url: string) {
         return new Promise<string>((resolve, reject) => {
             this.api.axios
                 .get(`https://${this.api.schoolId}.mobidziennik.pl${url}`)
                 .then((el: AxiosResponse<any>) => {
-                    Utils.loggedInCheck(el, resolve, reject);
+                    Utils.isLoggedIn(el, resolve, reject);
                 })
                 .catch((e) => {
                     console.error(e);
@@ -23,12 +23,12 @@ export class Module {
         });
     }
 
-    public webPost(url: string, data: any) {
-        return new Promise<string>((resolve, reject) => {
+    protected webPost(url: string, data: any) {
+        return new Promise<any>((resolve, reject) => {
             this.api.axios
                 .post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, new URLSearchParams(data))
                 .then((el: AxiosResponse<any>) => {
-                    Utils.loggedInCheck(el, resolve, reject);
+                    Utils.isLoggedIn(el, resolve, reject);
                 })
                 .catch((e) => {
                     console.error(e);

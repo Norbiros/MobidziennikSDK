@@ -1,7 +1,7 @@
 import { Module } from '../module';
 import { Utils } from '../utils';
-import { Message, MessageBody } from '../models/message';
-import { Attachment } from '../models/attachment';
+import { Message, MessageBody } from '../models/messages/message';
+import { Attachment } from '../models/messages/attachment';
 import { User } from '../models/user';
 
 import * as cheerio from 'cheerio';

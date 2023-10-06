@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User } from '../user';
 import { Attachment } from './attachment';
 
 export interface Message {
