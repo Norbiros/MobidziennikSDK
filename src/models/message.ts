@@ -1,5 +1,5 @@
-import {User} from "./user";
-import {Attachment} from "./attachment";
+import { User } from './user';
+import { Attachment } from './attachment';
 
 export interface Message {
     id: string;

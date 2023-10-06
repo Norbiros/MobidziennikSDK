@@ -1,6 +1,6 @@
-import {MobidziennikAPI} from './index';
-import {AxiosResponse} from 'axios';
-import {Utils} from './utils';
+import { MobidziennikAPI } from './index';
+import { AxiosResponse } from 'axios';
+import { Utils } from './utils';
 
 export class Module {
     protected api: MobidziennikAPI;

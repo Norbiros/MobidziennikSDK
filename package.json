@@ -1,7 +1,7 @@
 {
   "name": "mobidziennik-api",
   "version": "1.0.0",
-  "description": "TypeScript site scraping API for Polish e-gradebook MobiDziennik",
+  "description": "TypeScript web scraping API for Polish e-gradebook MobiDziennik",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -31,8 +31,9 @@
     "Norbiros"
   ],
   "devDependencies": {
-    "@types/tough-cookie": "^4.0.2",
     "@types/cheerio": "^0.22.32",
+    "@types/tough-cookie": "^4.0.2",
+    "eslint-config-prettier": "^9.0.0",
     "prettier": "^2.8.4",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",

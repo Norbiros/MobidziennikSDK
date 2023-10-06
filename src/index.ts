@@ -1,16 +1,18 @@
-import axios, {AxiosInstance} from 'axios';
-import {wrapper} from 'axios-cookiejar-support';
-import {CookieJar} from 'tough-cookie';
-import {Messages} from './modules/messages';
+import axios, { AxiosInstance } from 'axios';
+import { wrapper } from 'axios-cookiejar-support';
+import { CookieJar } from 'tough-cookie';
+import { Messages } from './modules/messages';
 
 export class MobidziennikAPI {
     readonly axios: AxiosInstance;
     readonly schoolId: string;
-    public messages: Messages = new Messages(this);
     private readonly cookie: CookieJar;
 
-    constructor(schooldId: string) {
-        this.schoolId = schooldId;
+    // Modules
+    public messages: Messages = new Messages(this);
+
+    constructor(schoolId: string) {
+        this.schoolId = schoolId;
         this.cookie = new CookieJar();
         this.axios = wrapper(
             axios.create({
@@ -18,6 +20,8 @@ export class MobidziennikAPI {
                 withCredentials: true,
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
+                    Information:
+                        'MobidziennikAPI - Unofficial Mobidziennik API for Node.js (https://github.com/Norbiros/MobidziennikAPI)',
                 },
             }),
         );
@@ -30,11 +34,9 @@ export class MobidziennikAPI {
                 new URLSearchParams({
                     login: email,
                     haslo: pass,
-                    info: 'MobidziennikAPI - Unofficial Mobidziennik API for Node.js (https://github.com/Norbiros/MobidziennikAPI)',
                 }),
             )
             .then((e) => {
-                // console.log(e.data)
                 return e.data;
             })
             .catch((e: Promise<boolean>) => {
