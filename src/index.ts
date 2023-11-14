@@ -3,6 +3,7 @@ import { wrapper } from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie';
 import { Messages } from './modules/messages';
 import { Library } from './modules/library';
+import { Calendar } from './modules/calendar';
 
 export class MobidziennikSDK {
     readonly axios: AxiosInstance;
@@ -12,6 +13,7 @@ export class MobidziennikSDK {
     // Modules
     public messages: Messages = new Messages(this);
     public library: Library = new Library(this);
+    public calendar: Calendar = new Calendar(this);
 
     constructor(schoolId: string) {
         this.schoolId = schoolId;
