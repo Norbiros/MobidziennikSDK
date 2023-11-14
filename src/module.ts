@@ -1,11 +1,11 @@
-import { MobidziennikAPI } from './index';
+import { MobidziennikSDK } from './index';
 import { AxiosResponse } from 'axios';
 import { Utils } from './utils';
 
 export class Module {
-    protected api: MobidziennikAPI;
+    protected api: MobidziennikSDK;
 
-    constructor(api: MobidziennikAPI) {
+    constructor(api: MobidziennikSDK) {
         this.api = api;
     }
 

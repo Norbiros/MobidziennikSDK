@@ -4,7 +4,7 @@ import { CookieJar } from 'tough-cookie';
 import { Messages } from './modules/messages';
 import { Library } from './modules/library';
 
-export class MobidziennikAPI {
+export class MobidziennikSDK {
     readonly axios: AxiosInstance;
     readonly schoolId: string;
     private readonly cookie: CookieJar;
@@ -23,7 +23,7 @@ export class MobidziennikAPI {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
                     Information:
-                        'MobidziennikAPI - Unofficial Mobidziennik API for Node.js (https://github.com/Norbiros/MobidziennikAPI)',
+                        'MobidziennikSDK - Unofficial Mobidziennik SDK for Node.js (https://github.com/Norbiros/MobidziennikSDK)',
                 },
             }),
         );
