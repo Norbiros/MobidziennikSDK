@@ -34,27 +34,31 @@ export class Messages extends Module {
         const $ = cheerio.load(text);
         const content = $('.wiadomosc_tresc');
 
-        const metadata = content.find('div');
+        const metadata = content.find('div:last-child');
         const [senderText, sendText, readText] =
             metadata
                 .html()
                 ?.split('<br>')
                 .map((item) => item.trim()) || [];
 
-        const body = content.contents().filter((index, element) => {
-            return !$(element).is('div');
-        });
+        const body = content.children().slice(0, -1)
+        const bodyText = body.map((index, element) => {
+            const textContent = $(element).text();
+            return textContent.replace(/div/g, '\n');
+        }).get();
 
         const recipients: User[] = [];
-        $('.spis > tbody > tr:not(.naglowek)').each((i, e) => {
-            const tds = $(e).find('td');
-            const fullName = tds.eq(0).text().trim().split(' ');
-            recipients.push({
-                name: fullName[1],
-                surname: fullName[0],
-                type: tds.eq(1).text().trim(),
+        if (body.text().includes('Odbiorcy')) {
+            $('.spis > tbody > tr:not(.naglowek)').each((i, e) => {
+                const tds = $(e).find('td');
+                const fullName = tds.eq(0).text().trim().split(' ');
+                recipients.push({
+                    name: fullName[1],
+                    surname: fullName[0],
+                    type: tds.eq(1).text().trim(),
+                });
             });
-        });
+        }
 
         const attachments: Attachment[] = [];
         $('#zalaczniki > li > a').each((i, e) => {
@@ -65,7 +69,7 @@ export class Messages extends Module {
         });
 
         return {
-            body: body.text().trim(),
+            body: bodyText.join('\n'),
             sender: Utils.parseUser(senderText.replace('nadawca: ', '')),
             sendDate: Utils.parseMessageDate(sendText.replace('czas wysłania: ', '')),
             readDate: Utils.parseMessageDate(readText.replace('czas przeczytania: ', '')),

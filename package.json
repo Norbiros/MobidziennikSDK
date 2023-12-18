@@ -1,6 +1,6 @@
 {
   "name": "mobidziennik-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TypeScript web scraping SDK for Polish e-gradebook MobiDziennik",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

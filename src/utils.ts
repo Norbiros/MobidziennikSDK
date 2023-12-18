@@ -16,7 +16,7 @@ export class Utils {
         return {
             name,
             surname,
-            type: userType.split(',')[0],
+            type: userType.includes(',') ? userType.split(',')[0] : userType,
         };
     }
 
