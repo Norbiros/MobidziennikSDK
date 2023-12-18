@@ -10,7 +10,7 @@ import { AxiosResponse } from 'axios';
 
 export class Messages extends Module {
     public async getMessages(): Promise<Message[]> {
-        const text = await this.webGet('/dziennik/wiadomosci');
+        const text = await this.webGet('/dziennik/wiadomosci/?sortuj_wg=otrzymano&sortuj_typ=desc&odebrane=1');
         const $ = cheerio.load(text);
         const messages: Message[] = [];
         $('tr.podswietl').each((i, e) => {
@@ -41,14 +41,22 @@ export class Messages extends Module {
                 ?.split('<br>')
                 .map((item) => item.trim()) || [];
 
-        const body = content.children().slice(0, -1)
-        const bodyText = body.map((index, element) => {
-            const textContent = $(element).text();
-            return textContent.replace(/div/g, '\n');
-        }).get();
+        const title = $('#content > h1').first().text().trim();
+
+        const body = content.contents().filter((index, element) => {
+            const div = $(element);
+            return !(div.text().includes('nadawca:') && element.type === 'tag' && div.prop('tagName') === 'DIV');
+        });
+
+        const bodyText = body
+            .map((index, element) => {
+                const textContent = $(element).text();
+                return textContent.replace(/div/g, '\n');
+            })
+            .get();
 
         const recipients: User[] = [];
-        if (body.text().includes('Odbiorcy')) {
+        if ($('.spis > tbody > tr.naglowek').text().includes('Odbiorca')) {
             $('.spis > tbody > tr:not(.naglowek)').each((i, e) => {
                 const tds = $(e).find('td');
                 const fullName = tds.eq(0).text().trim().split(' ');
@@ -69,7 +77,12 @@ export class Messages extends Module {
         });
 
         return {
-            body: bodyText.join('\n'),
+            title,
+            content: bodyText.join('\n'),
+            html: body
+                .map((index, element) => $(element))
+                .get()
+                .join(''),
             sender: Utils.parseUser(senderText.replace('nadawca: ', '')),
             sendDate: Utils.parseMessageDate(sendText.replace('czas wysłania: ', '')),
             readDate: Utils.parseMessageDate(readText.replace('czas przeczytania: ', '')),

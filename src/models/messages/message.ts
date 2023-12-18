@@ -11,7 +11,9 @@ export interface Message {
 }
 
 export interface MessageBody {
-    body: string;
+    title: string;
+    content: string;
+    html: string;
     sender: User;
     sendDate: Date;
     readDate: Date;

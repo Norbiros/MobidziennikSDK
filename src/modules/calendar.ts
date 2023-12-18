@@ -29,7 +29,7 @@ export class Calendar extends Module {
                 content: entry.comment,
                 start: new Date(entry.start),
                 end: new Date(entry.end),
-            }
+            };
         });
     }
 }
