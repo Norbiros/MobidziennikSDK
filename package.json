@@ -2,6 +2,8 @@
   "name": "mobidziennik-sdk",
   "version": "1.2.0",
   "description": "TypeScript web scraping SDK for Polish e-gradebook MobiDziennik",
+  "license": "GPL",
+  "author": "Norbiros",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -24,11 +26,10 @@
   },
   "keywords": [
     "mobidziennik",
-    "api"
-  ],
-  "license": "GPL",
-  "contributors": [
-    "Norbiros"
+    "sdk",
+    "typescript",
+    "e-gradebook",
+    "webscraping"
   ],
   "devDependencies": {
     "@types/node": "^22.9.3",
