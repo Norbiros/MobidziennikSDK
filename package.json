@@ -11,11 +11,11 @@
     "test": "echo Test!",
     "build": "tsc",
     "format": "prettier --write src/",
-    "lint": "tslint -p tsconfig.json",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
+    "lint": "eslint src/",
+    "prepare": "pnpm build",
+    "prepublishOnly": "pnpm test && pnpm lint",
+    "preversion": "pnpm lint",
+    "version": "pnpm format && git add -A src",
     "postversion": "git push && git push --tags"
   },
   "repository": {
@@ -44,5 +44,6 @@
     "axios-cookiejar-support": "^4.0.6",
     "cheerio": "^1.0.0-rc.12",
     "tough-cookie": "^4.1.2"
-  }
+  },
+  "packageManager": "pnpm@9.12.1"
 }
