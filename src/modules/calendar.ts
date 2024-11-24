@@ -21,6 +21,7 @@ export class Calendar extends Module {
 
         const events = JSON.parse(regexMatch[1]);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return events.map((entry: any): CalendarEntry => {
             return {
                 id: entry.id,

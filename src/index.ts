@@ -8,7 +8,8 @@ import { Calendar } from './modules/calendar';
 export class MobidziennikSDK {
     readonly axios: AxiosInstance;
     readonly schoolId: string;
-    private readonly cookie: CookieJar;
+    readonly schoolUrl: string;
+    readonly cookie: CookieJar;
 
     // Modules
     public messages: Messages = new Messages(this);
@@ -17,6 +18,7 @@ export class MobidziennikSDK {
 
     constructor(schoolId: string) {
         this.schoolId = schoolId;
+        this.schoolUrl = `https://${schoolId}.mobidziennik.pl`;
         this.cookie = new CookieJar();
         this.axios = wrapper(
             axios.create({
@@ -34,7 +36,7 @@ export class MobidziennikSDK {
     authorize(email: string, pass: string): Promise<boolean> {
         return this.axios
             .post(
-                `https://${this.schoolId}.mobidziennik.pl/dziennik`,
+                `${this.schoolUrl}/dziennik`,
                 new URLSearchParams({
                     login: email,
                     haslo: pass,

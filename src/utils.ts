@@ -1,5 +1,4 @@
 import { User } from './models/user';
-import { AxiosResponse } from 'axios';
 
 export class Utils {
     public static parseMessageDate(date: string): Date {
@@ -20,21 +19,14 @@ export class Utils {
         };
     }
 
-    public static isLoggedIn(
-        el: AxiosResponse<any>,
-        resolve: (value: string | PromiseLike<string>) => void,
-        reject: (reason?: any) => void,
-    ) {
-        const text = el.data;
+    public static isLoggedIn(text: string) {
         if (
-            text instanceof String &&
-            (text === 'Nie jestes zalogowany' ||
-                text.includes('przypomnij_haslo_email') ||
-                text.includes('Podano niepoprawny login i/lub hasło'))
+            text === 'Nie jestes zalogowany' ||
+            text.includes('przypomnij_haslo_email') ||
+            text.includes('Podano niepoprawny login i/lub hasło')
         ) {
-            reject(new Error('Not logged in'));
+            throw new Error('Not logged in');
         }
-        resolve(text);
     }
 
     public static monthToNumber(month: string): number {

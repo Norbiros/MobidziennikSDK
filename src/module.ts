@@ -1,5 +1,4 @@
 import { MobidziennikSDK } from './index';
-import { AxiosResponse } from 'axios';
 import { Utils } from './utils';
 
 export class Module {
@@ -9,31 +8,17 @@ export class Module {
         this.api = api;
     }
 
-    protected webGet(url: string) {
-        return new Promise<string>((resolve, reject) => {
-            this.api.axios
-                .get(`https://${this.api.schoolId}.mobidziennik.pl${url}`)
-                .then((el: AxiosResponse<any>) => {
-                    Utils.isLoggedIn(el, resolve, reject);
-                })
-                .catch((e) => {
-                    console.error(e);
-                    reject(e);
-                });
-        });
+    protected async webGet(url: string) {
+        const response = await this.api.axios.get(`https://${this.api.schoolId}.mobidziennik.pl${url}`);
+        Utils.isLoggedIn(response.data);
+
+        return response.data;
     }
 
-    protected webPost(url: string, data: any) {
-        return new Promise<any>((resolve, reject) => {
-            this.api.axios
-                .post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, new URLSearchParams(data))
-                .then((el: AxiosResponse<any>) => {
-                    Utils.isLoggedIn(el, resolve, reject);
-                })
-                .catch((e) => {
-                    console.error(e);
-                    reject(e);
-                });
-        });
+    protected async webPost(url: string, data: URLSearchParams) {
+        const response = await this.api.axios.post(`https://${this.api.schoolId}.mobidziennik.pl${url}`, data);
+        Utils.isLoggedIn(response.data);
+
+        return response.data;
     }
 }

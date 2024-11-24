@@ -92,31 +92,37 @@ export class Messages extends Module {
     }
 
     public async sendMessage(topic: string, content: string, recipients: string[]): Promise<void> {
-        const url = `/dziennik/dodajwiadomosc`;
-        await this.webPost(url, {
+        const urlParams = new URLSearchParams({
             nazwa: topic,
             tresc: content,
             widok_odbiorcow: '1',
             typodbiorcow: '4',
             file: '',
-            'odbiorcy[]': recipients,
         });
+
+        for (const recipient of recipients) {
+            urlParams.append('odbiorcy[]', recipient);
+        }
+
+        await this.webPost(`/dziennik/dodajwiadomosc`, urlParams);
     }
 
     async downloadAttachment(url: string, destinationPath: string): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                const response: AxiosResponse<fs.ReadStream> = await this.api.axios.get(url, {
-                    responseType: 'stream',
-                });
-                if (response.status !== 200) return reject(`Failed to download file. Status code: ${response.status}`);
-                const writer = fs.createWriteStream(destinationPath);
-                response.data.pipe(writer);
-                writer.on('finish', () => resolve());
-                writer.on('error', (error) => reject(`Error while writing to file: ${error}`));
-            } catch (error) {
-                reject(`Error while downloading file: ${error}`);
-            }
+        const response: AxiosResponse<fs.ReadStream> = await this.api.axios.get(url, {
+            responseType: 'stream',
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`Failed to download file. Status code: ${response.status}`);
+        }
+
+        const writer = fs.createWriteStream(destinationPath);
+
+        await new Promise<void>((resolve, reject) => {
+            response.data.pipe(writer);
+
+            writer.on('finish', resolve);
+            writer.on('error', (error) => reject(new Error(`Error while writing to file: ${error}`)));
         });
     }
 }
