@@ -1,0 +1,13 @@
+name: 🧹 Refactor
+description: Refactor the current code!
+title: '[Refactor]: '
+labels: ['type: refactor']
+body:
+  - type: textarea
+    id: whattochange
+    attributes:
+      label: What to refactor?
+      description: Describe the current code's status and how it can be improved.
+      placeholder: Change function abc to...
+    validations:
+      required: true
