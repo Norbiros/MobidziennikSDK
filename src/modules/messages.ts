@@ -1,16 +1,18 @@
+import type { Attachment } from '../models/messages/attachment';
+import type { Message, MessageBody } from '../models/messages/message';
+import type { User } from '../models/user';
 import { Module } from '../module';
-import { Utils } from '../utils';
-import { Message, MessageBody } from '../models/messages/message';
-import { Attachment } from '../models/messages/attachment';
-import { User } from '../models/user';
+import { parseMessageDate, parseUser } from '../utils';
 
+import * as fs from 'node:fs';
+import type { AxiosResponse } from 'axios';
 import * as cheerio from 'cheerio';
-import * as fs from 'fs';
-import { AxiosResponse } from 'axios';
 
 export class Messages extends Module {
     public async getMessages(): Promise<Message[]> {
-        const text = await this.webGet('/dziennik/wiadomosci/?sortuj_wg=otrzymano&sortuj_typ=desc&odebrane=1');
+        const text = await this.webGet(
+            '/dziennik/wiadomosci/?sortuj_wg=otrzymano&sortuj_typ=desc&odebrane=1',
+        );
         const $ = cheerio.load(text);
         const messages: Message[] = [];
         $('tr.podswietl').each((i, e) => {
@@ -19,9 +21,12 @@ export class Messages extends Module {
             const message: Message = {
                 id: $(e).attr('rel') || '',
                 topic: $(tds[0]).text().trim(),
-                attachments: parseInt($(tds[1]).find('strong').text().trim() || '0', 10),
+                attachments: Number.parseInt(
+                    $(tds[1]).find('strong').text().trim() || '0',
+                    10,
+                ),
                 isStarred: $(tds[2]).text().includes('★'),
-                sender: Utils.parseUser($(tds[3]).text().trim()),
+                sender: parseUser($(tds[3]).text().trim()),
                 seen: $(tds[5]).text().includes('Tak'),
             };
             messages.push(message);
@@ -35,17 +40,20 @@ export class Messages extends Module {
         const content = $('.wiadomosc_tresc');
 
         const metadata = content.find('div:last-child');
-        const [senderText, sendText, readText] =
-            metadata
-                .html()
-                ?.split('<br>')
-                .map((item) => item.trim())!;
+        const metadataHtml = metadata.html();
+        const [senderText, sendText, readText] = metadataHtml
+            ? metadataHtml.split('<br>').map((item) => item.trim())
+            : [];
 
         const title = $('#content > h1').first().text().trim();
 
         const body = content.contents().filter((index, element) => {
             const div = $(element);
-            return !(div.text().includes('nadawca:') && element.type === 'tag' && div.prop('tagName') === 'DIV');
+            return !(
+                div.text().includes('nadawca:') &&
+                element.type === 'tag' &&
+                div.prop('tagName') === 'DIV'
+            );
         });
 
         const bodyText = body
@@ -61,8 +69,8 @@ export class Messages extends Module {
                 const tds = $(e).find('td');
                 const fullName = tds.eq(0).text().trim().split(' ');
                 recipients.push({
-                    name: fullName[1]!,
-                    surname: fullName[0]!,
+                    name: fullName[1],
+                    surname: fullName[0],
                     type: tds.eq(1).text().trim(),
                 });
             });
@@ -83,15 +91,23 @@ export class Messages extends Module {
                 .map((index, element) => $(element))
                 .get()
                 .join(''),
-            sender: Utils.parseUser(senderText!.replace('nadawca: ', '')),
-            sendDate: Utils.parseMessageDate(sendText!.replace('czas wysłania: ', '')),
-            readDate: Utils.parseMessageDate(readText!.replace('czas przeczytania: ', '')),
+            sender: parseUser(senderText?.replace('nadawca: ', '')),
+            sendDate: parseMessageDate(
+                sendText?.replace('czas wysłania: ', ''),
+            ),
+            readDate: parseMessageDate(
+                readText?.replace('czas przeczytania: ', ''),
+            ),
             attachments,
             recipients,
         };
     }
 
-    public async sendMessage(topic: string, content: string, recipients: string[]): Promise<void> {
+    public async sendMessage(
+        topic: string,
+        content: string,
+        recipients: string[],
+    ): Promise<void> {
         const urlParams = new URLSearchParams({
             nazwa: topic,
             tresc: content,
@@ -104,16 +120,24 @@ export class Messages extends Module {
             urlParams.append('odbiorcy[]', recipient);
         }
 
-        await this.webPost(`/dziennik/dodajwiadomosc`, urlParams);
+        await this.webPost('/dziennik/dodajwiadomosc', urlParams);
     }
 
-    async downloadAttachment(url: string, destinationPath: string): Promise<void> {
-        const response: AxiosResponse<fs.ReadStream> = await this.api.axios.get(url, {
-            responseType: 'stream',
-        });
+    async downloadAttachment(
+        url: string,
+        destinationPath: string,
+    ): Promise<void> {
+        const response: AxiosResponse<fs.ReadStream> = await this.api.axios.get(
+            url,
+            {
+                responseType: 'stream',
+            },
+        );
 
         if (response.status !== 200) {
-            throw new Error(`Failed to download file. Status code: ${response.status}`);
+            throw new Error(
+                `Failed to download file. Status code: ${response.status}`,
+            );
         }
 
         const writer = fs.createWriteStream(destinationPath);
@@ -122,7 +146,9 @@ export class Messages extends Module {
             response.data.pipe(writer);
 
             writer.on('finish', resolve);
-            writer.on('error', (error) => reject(new Error(`Error while writing to file: ${error}`)));
+            writer.on('error', (error) =>
+                reject(new Error(`Error while writing to file: ${error}`)),
+            );
         });
     }
 }

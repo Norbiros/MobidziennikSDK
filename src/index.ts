@@ -1,9 +1,9 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 import { wrapper } from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie';
-import { Messages } from './modules/messages';
-import { Library } from './modules/library';
 import { Calendar } from './modules/calendar';
+import { Library } from './modules/library';
+import { Messages } from './modules/messages';
 
 export class MobidziennikSDK {
     readonly axios: AxiosInstance;
@@ -25,7 +25,8 @@ export class MobidziennikSDK {
                 jar: this.cookie,
                 withCredentials: true,
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
+                    'User-Agent':
+                        'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
                     Information:
                         'MobidziennikSDK - Unofficial Mobidziennik SDK for Node.js (https://github.com/Norbiros/MobidziennikSDK)',
                 },

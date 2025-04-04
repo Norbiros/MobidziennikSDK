@@ -1,5 +1,5 @@
+import type { Book } from '../models/library/book';
 import { Module } from '../module';
-import { Book } from '../models/library/book';
 
 export class Library extends Module {
     public async searchBooks(searchPhrase: string): Promise<Book[]> {
@@ -10,7 +10,8 @@ export class Library extends Module {
             }),
         );
 
-        if (!text.resources) throw new Error(`Invalid response (${text.komunikat})`);
+        if (!text.resources)
+            throw new Error(`Invalid response (${text.komunikat})`);
         const resources = text.resources;
 
         const books: Book[] = [];

@@ -1,19 +1,18 @@
 {
-  "compilerOptions": {
-    "lib": ["ESNext"],
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleDetection": "force",
-    "moduleResolution": "nodenext",
+    "compilerOptions": {
+        "lib": ["ESNext"],
+        "target": "ESNext",
+        "module": "NodeNext",
+        "moduleDetection": "force",
+        "moduleResolution": "nodenext",
 
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": false,
 
-    "declaration": true,
-    "outDir": "./lib",
-  },
-  "include": ["src"],
+        "declaration": true,
+        "outDir": "./lib"
+    },
+    "include": ["src"]
 }

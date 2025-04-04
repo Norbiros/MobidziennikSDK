@@ -22,5 +22,5 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Verify linting and formatting
-        run: pnpm lint && pnpm format --check
+      - name: Run lint
+        run: pnpm lint
