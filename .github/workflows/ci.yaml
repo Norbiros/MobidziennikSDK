@@ -14,7 +14,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 10.7.1
+          run_install: true
 
       - name: Run type checks
         run: pnpm tsc --noEmit
