@@ -32,9 +32,9 @@
     "webscraping"
   ],
   "devDependencies": {
-    "@types/node": "^22.14.0",
     "@eslint/js": "^9.23.0",
     "@types/cheerio": "^0.22.35",
+    "@types/node": "^22.14.0",
     "@types/tough-cookie": "^4.0.5",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",

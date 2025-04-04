@@ -1,11 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleDetection": "force",
+    "moduleResolution": "nodenext",
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+
     "declaration": true,
     "outDir": "./lib",
-    "strict": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"]
 }

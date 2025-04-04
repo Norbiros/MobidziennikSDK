@@ -39,7 +39,7 @@ export class Messages extends Module {
             metadata
                 .html()
                 ?.split('<br>')
-                .map((item) => item.trim()) || [];
+                .map((item) => item.trim())!;
 
         const title = $('#content > h1').first().text().trim();
 
@@ -61,8 +61,8 @@ export class Messages extends Module {
                 const tds = $(e).find('td');
                 const fullName = tds.eq(0).text().trim().split(' ');
                 recipients.push({
-                    name: fullName[1],
-                    surname: fullName[0],
+                    name: fullName[1]!,
+                    surname: fullName[0]!,
                     type: tds.eq(1).text().trim(),
                 });
             });
@@ -83,9 +83,9 @@ export class Messages extends Module {
                 .map((index, element) => $(element))
                 .get()
                 .join(''),
-            sender: Utils.parseUser(senderText.replace('nadawca: ', '')),
-            sendDate: Utils.parseMessageDate(sendText.replace('czas wysłania: ', '')),
-            readDate: Utils.parseMessageDate(readText.replace('czas przeczytania: ', '')),
+            sender: Utils.parseUser(senderText!.replace('nadawca: ', '')),
+            sendDate: Utils.parseMessageDate(sendText!.replace('czas wysłania: ', '')),
+            readDate: Utils.parseMessageDate(readText!.replace('czas przeczytania: ', '')),
             attachments,
             recipients,
         };

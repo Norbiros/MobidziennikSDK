@@ -19,7 +19,7 @@ export class Calendar extends Module {
             throw new Error('Invalid Mobidziennik response');
         }
 
-        const events = JSON.parse(regexMatch[1]);
+        const events = JSON.parse(regexMatch[1] as string);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return events.map((entry: any): CalendarEntry => {
