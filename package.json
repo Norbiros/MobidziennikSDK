@@ -1,6 +1,6 @@
 {
     "name": "mobidziennik-sdk",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "TypeScript web scraping SDK for Polish e-gradebook MobiDziennik",
     "license": "GPL",
     "author": "Norbiros",
