@@ -113,6 +113,8 @@ export class Messages extends Module {
             nazwa: topic,
             tresc: content,
             widok_odbiorcow: '1',
+            // FIXME: I think it only supports sending to students. Need to verify.
+            //        What if we want to send to a teacher or multiple types?
             typodbiorcow: '4',
             file: '',
         });
@@ -155,5 +157,40 @@ export class Messages extends Module {
                 reject(new Error(`Error while writing to file: ${error}`)),
             );
         });
+    }
+
+    /**
+     * @experimental
+     * This method will be improved and probably moved to a different module.
+     */
+    public async getStudentRecipients(): Promise<
+        Record<string, { name: string; surname: string }>
+    > {
+        const body = new URLSearchParams({
+            typ: '4',
+            odpowiedz: '0',
+            wiadomosci: 'true',
+        });
+
+        const html = await this.webPost('/dziennik/odbiorcyWiadomosci', body);
+        const $ = cheerio.load(html);
+
+        const recipients: Record<string, { name: string; surname: string }> =
+            {};
+
+        $('label.label1').each((i, e) => {
+            const input = $(e).find('input[name="odbiorcy[]"]');
+            const span = $(e).find('span.nazwa-uzytkownika');
+
+            const type = input.attr('value') || '';
+            const fullName = span.text().trim().split(' ');
+
+            recipients[type] = {
+                name: fullName[1] || '',
+                surname: fullName[0] || '',
+            };
+        });
+
+        return recipients;
     }
 }
