@@ -107,6 +107,7 @@ export class Messages extends Module {
         topic: string,
         content: string,
         recipients: string[],
+        attachments: string[] = [],
     ): Promise<void> {
         const urlParams = new URLSearchParams({
             nazwa: topic,
@@ -118,6 +119,10 @@ export class Messages extends Module {
 
         for (const recipient of recipients) {
             urlParams.append('odbiorcy[]', recipient);
+        }
+
+        for (const filePath of attachments) {
+            await this.webUpload(filePath);
         }
 
         await this.webPost('/dziennik/dodajwiadomosc', urlParams);

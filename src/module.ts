@@ -1,3 +1,5 @@
+import { createReadStream } from 'node:fs';
+import * as path from 'node:path';
 import type { MobidziennikSDK } from './index';
 import { isLoggedIn } from './utils';
 
@@ -24,6 +26,23 @@ export class Module {
             data,
         );
         isLoggedIn(response.data);
+
+        return response.data;
+    }
+
+    protected async webUpload(filePath: string) {
+        const fileName = path.basename(filePath);
+        const url = `https://${this.api.schoolId}.mobidziennik.pl/dziennik/ajaxupload?qqfile=${encodeURIComponent(fileName)}`;
+
+        const stream = createReadStream(filePath);
+
+        const response = await this.api.axios.post(url, stream, {
+            headers: { 'Content-Type': 'application/octet-stream' },
+        });
+
+        if (!response.data.success) {
+            console.warn(`File upload might have failed: ${response.data}`);
+        }
 
         return response.data;
     }
